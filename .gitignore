@@ -23,7 +23,10 @@ mono_crash.*
 [Rr]eleases/
 x64/
 x86/
+<<<<<<< HEAD
 [Ww][Ii][Nn]32/
+=======
+>>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
@@ -62,9 +65,12 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+<<<<<<< HEAD
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
+=======
+>>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
 # StyleCop
 StyleCopReport.xml
 
@@ -90,7 +96,10 @@ StyleCopReport.xml
 *.tmp_proj
 *_wpftmp.csproj
 *.log
+<<<<<<< HEAD
 *.tlog
+=======
+>>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
 *.vspscc
 *.vssscc
 .builds
@@ -141,11 +150,6 @@ _TeamCity*
 # AxoCover is a Code Coverage Tool
 .axoCover/*
 !.axoCover/settings.json
-
-# Coverlet is a free, cross platform Code Coverage Tool
-coverage*.json
-coverage*.xml
-coverage*.info
 
 # Visual Studio code coverage results
 *.coverage
@@ -206,9 +210,12 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
+<<<<<<< HEAD
 # Nuget personal access tokens and Credentials
 nuget.config
 
+=======
+>>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
@@ -361,6 +368,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+<<<<<<< HEAD
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
@@ -386,3 +394,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+=======
+>>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
