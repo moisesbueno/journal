@@ -1,13 +1,16 @@
 # Projeto Journal
 
-# Database Mapping
+## Database Mapping
 ![Modelagem Inicial](https://user-images.githubusercontent.com/32781707/181919692-b917390d-a48b-44ce-a0bc-ea246c3f345d.png)
 
-# Swagger
+## Swagger
 ![Screenshot from 2022-07-30 12-07-45](https://user-images.githubusercontent.com/32781707/181920406-d79ba6c7-c59f-44ef-a709-0ff5d65d46bb.png)
 
-# Run Database with docker
+## Run Database with docker
 docker run -p 3306:3306 --name maria-db -e MYSQL_ROOT_PASSWORD=root -d mariadb:10.5
+
+## Frontend wih VueJs
+![image](https://user-images.githubusercontent.com/32781707/181925521-e664c5e9-52c7-45d9-9984-aa5ad67fe152.png)
 
 ## Api 
 https://doaj.org/
