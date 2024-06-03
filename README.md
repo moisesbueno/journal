@@ -30,3 +30,24 @@ heroku container:release web -a find-journal-api
 heroku container:push web -a find-journal-front
 
 heroku container:release web -a find-journal-api
+
+
+## Implement on API
+
+* [ ] Entity Framework Core
+
+* [ ] RabbitMq
+
+* [ ] Serilog
+
+* [ ] DockerFile / DockerCompose
+
+* [ ] Migrar Projeto .NET 8 
+
+* [ ] DDD
+
+* [ ] UPDATE
+
+* [ ] DELETE
+
+* [ ] JWT
