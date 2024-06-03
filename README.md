@@ -40,6 +40,8 @@ heroku container:release web -a find-journal-api
 
 * [ ] Serilog
 
+* [ ] Redis
+
 * [ ] DockerFile / DockerCompose
 
 * [ ] Migrar Projeto .NET 8 
@@ -51,3 +53,7 @@ heroku container:release web -a find-journal-api
 * [ ] DELETE
 
 * [ ] JWT
+
+* [ ] IUnityOfWork
+
+* [ ] Dto's
