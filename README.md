@@ -44,7 +44,7 @@ heroku container:release web -a find-journal-api
 
 * [ ] DockerFile / DockerCompose
 
-* [ ] Migrar Projeto .NET 8 
+* [x] Migrar Projeto .NET 8 
 
 * [ ] DDD
 
