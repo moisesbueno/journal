@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Journal.Utils
+namespace Journal.Api.Utils
 {
     public class PaginatedList<T> where T : class
     {

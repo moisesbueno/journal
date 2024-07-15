@@ -1,11 +1,7 @@
-﻿using Journal.Models;
+﻿using Journal.Api.Models;
+using Journal.Api.Utils;
 using Journal.Repositories;
-using Journal.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Journal.Controllers
 {
@@ -23,7 +19,7 @@ namespace Journal.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<PaginatedList<JournalModel>>> GetJournals([FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 15, [FromQuery] string search = "")
+        public async Task<ActionResult<PaginatedList<JournalModel>>> GetJournals([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 15, [FromQuery] string search = "")
         {
 
             var (total, result) = await _journalRepository.GetAll(search, pageNumber, pageSize);
