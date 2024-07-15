@@ -1,61 +1,69 @@
 ﻿using Dapper;
-using Journal.Models;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
+using Journal.Api.Models;
+using Journal.Data;
+using Journal.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Journal.Repositories
 {
     public class JournalRepository
     {
-        private string ConnectionString;
-        public JournalRepository(IConfiguration configuration)
+        private readonly JournalContext _journalContext;
+        public JournalRepository(JournalContext journalContext)
         {
-            ConnectionString = configuration.GetConnectionString("Default");
+            _journalContext = journalContext;
         }
 
         public async Task<(int, IEnumerable<JournalModel>)> GetAll(string search, int pageNumber, int pageSize)
         {
-            using var db = DB.GetInstance().GetConnection(ConnectionString);
-            await db.OpenAsync();
 
-            StringBuilder sql = GetSql();
+            var query = _journalContext.Journals
+                                       .AsNoTracking()
+                                       .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(search)) sql.Append(" WHERE name LIKE @search");
-
-            sql.Append(" ORDER BY Name LIMIT @pageNumber,@pageSize;");
-
-            var sqlTotal = sql.ToString().Split("LIMIT").First();
-
-            var args = new
+            if (!string.IsNullOrEmpty(search))
             {
-                pageNumber,
-                pageSize,
-                search = $"%{search}%"
-            };
+                query = query.Where(c => c.Name.Contains(search));
+            }
 
-            var sqlCount = $"select count(1) FROM ({ sqlTotal }) as x;";
+            var total = await query.CountAsync();
 
-            using var multipe = await db.QueryMultipleAsync(sql + sqlCount, args);
-            var res = multipe.Read<JournalModel>();
-            var total = multipe.Read<int>().First();
+            var result = await query.Skip((pageNumber - 1) * pageSize)
+                                     .Take(pageSize)
+                                     .Select(journal => new JournalModel
+                                     {
+                                         Apc = journal.Apc,
+                                         Description = journal.Name,
+                                         Id = journal.Id,
+                                         Image = journal.Url,
+                                         Issn = journal.Issn,
+                                         Name = journal.Name,
+                                         Url = journal.Url,
+                                         QualisId = journal.Qualisid.HasValue? journal.Qualisid.Value: 0,
+                                     })
+                                     .ToListAsync();
 
-            return (total, res);
+            return (total, result);
 
         }
         public async Task<JournalModel> GetById(Guid id)
         {
-            using var db = DB.GetInstance().GetConnection(ConnectionString);
-            await db.OpenAsync();
+            var result = await (from journal in _journalContext.Journals.AsNoTracking()
+                                select new JournalModel
+                                {
+                                    Apc = journal.Apc,
+                                    Description = journal.Name,
+                                    Id = id,
+                                    Image = journal.Url,
+                                    Issn = journal.Issn,
+                                    Name = journal.Name,
+                                    Url = journal.Url,
+                                    QualisId = journal.Qualisid.Value
+                                }).FirstAsync();
 
-            StringBuilder sql = GetSql();
-
-            sql.Append(" WHERE j.Id = @Id");
-
-            return await db.QueryFirstAsync<JournalModel>(sql.ToString(), new { id });
+            return result;
 
         }
 

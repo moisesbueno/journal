@@ -1,4 +1,6 @@
 namespace Journal.Api;
+using Journal.Data;
+using Journal.Repositories;
 
 public class Program
 {
@@ -6,6 +8,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        AppModule.ConfigureDatabase(builder.Configuration);
+     
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -13,6 +17,9 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddJournalContext(builder.Configuration);
+        builder.Services.AddTransient<JournalRepository>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -25,8 +32,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
-
         app.MapControllers();
 
         app.Run();
