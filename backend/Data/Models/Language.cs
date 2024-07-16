@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Journal.Data.Models;
+﻿namespace Journal.Data.Models;
 
 public partial class Language
 {

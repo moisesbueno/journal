@@ -1,5 +1,4 @@
-﻿using Journal.Data.Maps;
-using Journal.Data.Models;
+﻿using Journal.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -43,7 +42,7 @@ public partial class JournalContext : DbContext
             .HasCharSet("utf8mb4");
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-       
+
         OnModelCreatingPartial(modelBuilder);
     }
 

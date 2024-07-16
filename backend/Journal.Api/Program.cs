@@ -1,4 +1,6 @@
 namespace Journal.Api;
+
+using Journal.Api.Repositories;
 using Journal.Data;
 using Journal.Repositories;
 
@@ -9,7 +11,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         AppModule.ConfigureDatabase(builder.Configuration);
-     
+
         // Add services to the container.
 
         builder.Services.AddControllers();
@@ -18,8 +20,8 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddJournalContext(builder.Configuration);
-        builder.Services.AddTransient<JournalRepository>();
-        
+        builder.Services.AddTransient<IJournalRepository, JournalRepository>();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
