@@ -1,4 +1,5 @@
 ﻿using DbUp;
+using Journal.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +11,8 @@ namespace Journal.Data
     {
         public static IServiceCollection AddJournalContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<MySqlData>();
+            services.AddSingleton<IDataSource, MySqlDataSource>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<JournalContext>(options =>
             {
                 var connectionString = configuration.GetSection("ConnectionString").Value;

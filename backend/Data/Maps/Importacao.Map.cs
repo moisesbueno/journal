@@ -20,7 +20,7 @@ namespace Journal.Data.Maps
                     .HasColumnName("name");
             builder.Property(e => e.Qualis2019)
                     .HasMaxLength(10)
-                    .HasColumnName("qualis_2019");  
+                    .HasColumnName("qualis_2019");
         }
     }
 }

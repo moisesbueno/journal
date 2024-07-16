@@ -2,16 +2,11 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace Journal.Data
+namespace Journal.Data.Interfaces
 {
-    public class MySqlData
+    public class MySqlDataSource(IConfiguration configuration) : IDataSource
     {
-        private readonly IConfiguration _configuration;
-        public MySqlData(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
+        private readonly IConfiguration _configuration = configuration;
         public async Task<IDbConnection> OpenConnectionAsync()
         {
             var connection = new MySqlConnection(_configuration.GetSection("ConnectionString").Value);

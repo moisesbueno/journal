@@ -1,22 +1,21 @@
-﻿using Dapper;
-using Journal.Api.Models;
+﻿using Journal.Api.Models;
+using Journal.Api.Repositories;
 using Journal.Data;
-using Journal.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Text;
+using System.Net.NetworkInformation;
 
 namespace Journal.Repositories
 {
-    public class JournalRepository
+    public class JournalRepository : IJournalRepository
     {
         private readonly JournalContext _journalContext;
+       
         public JournalRepository(JournalContext journalContext)
         {
-            _journalContext = journalContext;
+            _journalContext = journalContext;    
         }
 
-        public async Task<(int, IEnumerable<JournalModel>)> GetAll(string search, int pageNumber, int pageSize)
+        public async Task<(int, IEnumerable<JournalModel>)> GetAsync(string search, int pageNumber, int pageSize)
         {
 
             var query = _journalContext.Journals
@@ -41,35 +40,50 @@ namespace Journal.Repositories
                                          Issn = journal.Issn,
                                          Name = journal.Name,
                                          Url = journal.Url,
-                                         QualisId = journal.Qualisid.HasValue? journal.Qualisid.Value: 0,
+                                         QualisId = journal.Qualisid.HasValue ? journal.Qualisid.Value : 0,
                                      })
                                      .ToListAsync();
 
             return (total, result);
 
         }
-        public async Task<JournalModel> GetById(Guid id)
-        {
-            var result = await (from journal in _journalContext.Journals.AsNoTracking()
-                                select new JournalModel
-                                {
-                                    Apc = journal.Apc,
-                                    Description = journal.Name,
-                                    Id = id,
-                                    Image = journal.Url,
-                                    Issn = journal.Issn,
-                                    Name = journal.Name,
-                                    Url = journal.Url,
-                                    QualisId = journal.Qualisid.Value
-                                }).FirstAsync();
 
-            return result;
+        public Task UpdateAsync(JournalModel journal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var journal = await _journalContext.Journals.FindAsync(id);
+
+            _journalContext.Journals.Remove(journal);
+        }
+
+        public async Task<JournalModel> GetByIdAsync(Guid id)
+        {
+            return await _journalContext.Journals.AsNoTracking()
+                                            .Select(journal => new JournalModel()
+                                            {
+                                                Apc = journal.Apc,
+                                                Description = journal.Name,
+                                                Id = id,
+                                                Image = journal.Url,
+                                                Issn = journal.Issn,
+                                                Name = journal.Name,
+                                                Url = journal.Url,
+                                                QualisId = journal.Qualisid.Value
+                                            })
+                                            .FirstAsync(j => j.Id == id);
 
         }
 
-        private static StringBuilder GetSql()
+        public async Task AddAsync(JournalModel model)
         {
-            return new StringBuilder(@"SELECT j.*, q.Description FROM journal AS j LEFT JOIN qualis AS q ON j.QualisId = q.Id ");
+            await _journalContext.Journals.AddAsync(new Data.Models.Journal()
+            {
+
+            });
         }
     }
 }
