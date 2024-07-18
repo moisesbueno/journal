@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\1 - create-tables.sql" />
+    <None Remove="Scripts\2 - inserts-importacao.sql" />
+    <None Remove="Scripts\3 - insert-journal.sql" />
+    <None Remove="Scripts\4 - add-columns-date.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\4 - add-columns-date.sql" />
+    <EmbeddedResource Include="Scripts\1 - create-tables.sql" />
+    <EmbeddedResource Include="Scripts\3 - insert-journal.sql" />
+    <EmbeddedResource Include="Scripts\2 - inserts-importacao.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="dbup-mysql" Version="5.0.44" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,7 @@
-﻿namespace Journal.Data.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace Journal.Data.Models;
 
 public partial class Format
 {

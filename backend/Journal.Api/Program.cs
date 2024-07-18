@@ -1,8 +1,11 @@
-namespace Journal.Api;
-
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Journal.Api.Profiles;
 using Journal.Api.Repositories;
 using Journal.Data;
 using Journal.Repositories;
+
+namespace Journal.Api;
 
 public class Program
 {
@@ -15,9 +18,14 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddAutoMapper(typeof(Program));
+        builder.Services.AddFluentValidationAutoValidation()
+                        .AddValidatorsFromAssembly(typeof(Program).Assembly);
+
 
         builder.Services.AddJournalContext(builder.Configuration);
         builder.Services.AddTransient<IJournalRepository, JournalRepository>();
