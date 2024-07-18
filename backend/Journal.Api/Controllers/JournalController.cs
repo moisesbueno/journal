@@ -1,43 +1,46 @@
-﻿using Journal.Api.Models;
-using Journal.Api.Utils;
-using Journal.Repositories;
+﻿using AutoMapper;
+using Journal.Api.Models;
+using Journal.Api.Repositories;
+using Journal.Data.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Journal.Controllers
+namespace Journal.Api.Controllers
 {
     [ApiController]
     [Route("api/journal")]
-    public class JournalController : ControllerBase
+    public class JournalController : Controller
     {
-        private readonly ILogger<JournalController> _logger;
-        private readonly JournalRepository _journalRepository;
-       
-        public JournalController(ILogger<JournalController> logger, JournalRepository journalRepository)
+        private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IJournalRepository _journalRepository;
+        public JournalController(IMapper mapper, IUnitOfWork unitOfWork, IJournalRepository journalRepository)
         {
-            _logger = logger;
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
             _journalRepository = journalRepository;
         }
 
-        [HttpGet("")]
-        public async Task<ActionResult<PaginatedList<JournalModel>>> GetJournals([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 15, [FromQuery] string search = "")
+        [HttpPost("")]
+        public async Task<IActionResult> Post([FromBody] JournalRequest journalRequest)
         {
+            var journal = _mapper.Map<Data.Models.Journal>(journalRequest);
 
-            var (total, result) = await _journalRepository.GetAll(search, pageNumber, pageSize);
+            await _journalRepository.AddAsync(journal);
 
-            return Ok(new PaginatedList<JournalModel>(result.ToList(), pageSize, pageNumber, total));
+            await _unitOfWork.SaveChangesAsync();
 
+            return Ok(journal.Id);
         }
+
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PaginatedList<JournalModel>>> GetJouralById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _journalRepository.GetById(id);
+            var result = await _journalRepository.GetByIdAsync(id);
 
-            return Ok(result);
+            var response = _mapper.Map<JournalResponse>(result);
 
+            return Ok(response);
         }
-
     }
-
 }
-

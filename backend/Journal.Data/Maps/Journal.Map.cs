@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static Dapper.SqlMapper;
 
 namespace Journal.Data.Maps
 {
@@ -9,7 +10,6 @@ namespace Journal.Data.Maps
         {
 
             builder.HasKey(e => e.Id).HasName("PRIMARY");
-
             builder.ToTable("journal");
 
             builder.HasIndex(e => e.Formatid, "formatid");
@@ -18,24 +18,30 @@ namespace Journal.Data.Maps
 
             builder.Property(e => e.Id).HasColumnName("id");
             builder.Property(e => e.Aimscope)
-                    .HasMaxLength(255)
-                    .HasColumnName("aimscope");
+                .HasMaxLength(255)
+                .HasColumnName("aimscope");
             builder.Property(e => e.Apc).HasColumnName("apc");
+            builder.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("current_timestamp()")
+                .HasColumnType("datetime");
             builder.Property(e => e.Formatid)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("formatid");
+                .HasColumnType("int(11)")
+                .HasColumnName("formatid");
             builder.Property(e => e.Issn)
-                    .HasMaxLength(20)
-                    .HasColumnName("issn");
+                .HasMaxLength(20)
+                .HasColumnName("issn");
             builder.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .HasColumnName("name");
+                .HasMaxLength(255)
+                .HasColumnName("name");
             builder.Property(e => e.Qualisid)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("qualisid");
+                .HasColumnType("int(11)")
+                .HasColumnName("qualisid");
+            builder.Property(e => e.UpdatedAt)
+                .ValueGeneratedOnAddOrUpdate()
+                .HasColumnType("datetime");
             builder.Property(e => e.Url)
-                    .HasMaxLength(200)
-                    .HasColumnName("url");
+                .HasMaxLength(200)
+                .HasColumnName("url");
 
             builder.HasOne(d => d.Format).WithMany(p => p.Journals)
                     .HasForeignKey(d => d.Formatid)
