@@ -10,11 +10,9 @@
     <None Remove="Scripts\1 - create-tables.sql" />
     <None Remove="Scripts\2 - inserts-importacao.sql" />
     <None Remove="Scripts\3 - insert-journal.sql" />
-    <None Remove="Scripts\4 - add-columns-date.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\4 - add-columns-date.sql" />
     <EmbeddedResource Include="Scripts\1 - create-tables.sql" />
     <EmbeddedResource Include="Scripts\3 - insert-journal.sql" />
     <EmbeddedResource Include="Scripts\2 - inserts-importacao.sql" />

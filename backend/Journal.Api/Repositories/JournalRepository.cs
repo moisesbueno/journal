@@ -13,11 +13,31 @@ namespace Journal.Repositories
         public JournalRepository(JournalContext journalContext)
         {
             _journalContext = journalContext;
+            Search = string.Empty;
         }
+
+        public string Search { get; }
 
         public async Task AddAsync(Data.Models.Journal model)
         {
             await _journalContext.Journals.AddAsync(model);
+        }
+
+        public async Task<int> CountAsync()
+        {
+            var query = _journalContext.Journals
+                                       .AsNoTracking()
+                                       .AsQueryable();
+
+            if (!string.IsNullOrEmpty(Search))
+            {
+                query = query.Where(c => c.Name.Contains(Search));
+            }
+
+            var total = await query.CountAsync();
+
+            return total;
+          
         }
 
         public async Task DeleteAsync(Guid id)
@@ -27,7 +47,7 @@ namespace Journal.Repositories
             _journalContext.Journals.Remove(journal);
         }
 
-        public async Task<(int, IEnumerable<Data.Models.Journal>)> GetAsync(string search, int pageNumber, int pageSize)
+        public async Task<IEnumerable<Data.Models.Journal>> GetAsync(string search, int pageNumber, int pageSize)
         {
             var query = _journalContext.Journals
                                        .AsNoTracking()
@@ -38,13 +58,11 @@ namespace Journal.Repositories
                 query = query.Where(c => c.Name.Contains(search));
             }
 
-            var total = await query.CountAsync();
-
             var result = await query.Skip((pageNumber - 1) * pageSize)
                                      .Take(pageSize)
                                      .ToListAsync();
 
-            return (total, result);
+            return result;
         }
 
         public async Task<Data.Models.Journal> GetByIdAsync(Guid id)

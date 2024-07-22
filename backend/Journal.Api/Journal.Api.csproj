@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Journal.Data\Journal.Data.csproj" />
+      <ProjectReference Include="..\Journal.MessageBus\Journal.MessageBus.csproj" />
     </ItemGroup>
 
 </Project>
