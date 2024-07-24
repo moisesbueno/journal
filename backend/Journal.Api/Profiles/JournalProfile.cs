@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using Journal.Api.Models;
-using Journal.MessageBus;
+using Journal.MessageBus.Messages;
 namespace Journal.Api.Profiles
 {
     public class JournalProfile : Profile
     {
         public JournalProfile()
         {
-            CreateMap<JournalRequest, JournalQueue>();
-
-            CreateMap<JournalQueue, Data.Models.Journal>();
-
+            CreateMap<JournalRequest, JournalMessage>()
+                                .ForMember(c => c.Qualis2019, c => c.MapFrom(c => c.Qualis));
         }
     }
 }

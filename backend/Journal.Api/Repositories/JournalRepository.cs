@@ -1,10 +1,9 @@
 ﻿using Journal.Api.Models;
-using Journal.Api.Repositories;
 using Journal.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Net.NetworkInformation;
 
-namespace Journal.Repositories
+namespace Journal.Api.Repositories
 {
     public class JournalRepository : IJournalRepository
     {
@@ -37,7 +36,7 @@ namespace Journal.Repositories
             var total = await query.CountAsync();
 
             return total;
-          
+
         }
 
         public async Task DeleteAsync(Guid id)

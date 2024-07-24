@@ -13,43 +13,27 @@ namespace Journal.MessageBus
         {
             _configuration = configuration;
         }
-        public async Task SendMessageAsync(TEntity message)
+        public async Task SendMessageAsync(TEntity message, string queueName)
         {
             var factory = new ConnectionFactory()
             {
                 Uri = new Uri(_configuration.GetSection("RabbitMQ").Value)
             };
 
-            var connection = factory.CreateConnection();
+            using var connection = factory.CreateConnection();
 
             using var channel = connection.CreateModel();
 
-            var queueName = GetQueueName(message);
-
-            channel.QueueDeclare(queue: queueName,
-                                    durable: false,
-                                    exclusive: false,
-                                    autoDelete: false,
-                                    arguments: null);
+            channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
 
-            channel.BasicPublish(exchange: "",
-                                    routingKey: queueName,
-                                    basicProperties: null,
-                                    body: body);
-            await Task.CompletedTask;
-        }
+            await Task.Run(() =>
+            {
+                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body: body);
+            });
 
-        private string GetQueueName(TEntity message)
-        {
-            var queueName = message.GetType()
-                                .CustomAttributes
-                                .First(a => a.AttributeType == typeof(QueueNameAttribute))
-                                .ConstructorArguments[0].Value.ToString();
-
-            return queueName;
         }
     }
 }
