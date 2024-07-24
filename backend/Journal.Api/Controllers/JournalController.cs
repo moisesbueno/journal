@@ -2,6 +2,8 @@
 using Journal.Api.Models;
 using Journal.Api.Repositories;
 using Journal.Data.Interfaces;
+using Journal.MessageBus;
+using Journal.MessageBus.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Journal.Api.Controllers
@@ -13,23 +15,24 @@ namespace Journal.Api.Controllers
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJournalRepository _journalRepository;
-        public JournalController(IMapper mapper, IUnitOfWork unitOfWork, IJournalRepository journalRepository)
+        private readonly IPublisher<JournalMessage> _journalPublisher;
+
+        public JournalController(IMapper mapper, IUnitOfWork unitOfWork, IJournalRepository journalRepository, IPublisher<JournalMessage> journalPublisher)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _journalRepository = journalRepository;
+            _journalPublisher = journalPublisher;
         }
 
         [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] JournalRequest journalRequest)
         {
-            var journal = _mapper.Map<Data.Models.Journal>(journalRequest);
+            var journalMessage = _mapper.Map<JournalMessage>(journalRequest);
 
-            await _journalRepository.AddAsync(journal);
+            await _journalPublisher.SendMessageAsync(journalMessage, QueuesName.JournalQueue);
 
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok(journal.Id);
+            return Ok(journalMessage.Id);
         }
 
 

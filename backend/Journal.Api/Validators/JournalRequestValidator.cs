@@ -10,6 +10,10 @@ namespace Journal.Api.Validators
             RuleFor(r => r.Issn)
                 .NotEmpty()
                 .NotNull();
+
+            RuleFor(r => r.Name)
+                .NotEmpty()
+                .NotNull();
         }
     }
 }

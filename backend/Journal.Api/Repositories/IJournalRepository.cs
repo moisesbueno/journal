@@ -5,10 +5,12 @@ namespace Journal.Api.Repositories
 {
     public interface IJournalRepository
     {
+        string Search { get; }
         Task UpdateAsync(JournalModel journal);
         Task DeleteAsync(Guid id);
         Task<JournalModel> GetByIdAsync(Guid id);
-        Task<(int, IEnumerable<JournalModel>)> GetAsync(string search, int pageNumber, int pageSize);
+        Task<IEnumerable<JournalModel>> GetAsync(string search, int pageNumber, int pageSize);
+        Task<int> CountAsync();
         Task AddAsync(JournalModel model);
     }
 }
