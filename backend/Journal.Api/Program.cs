@@ -4,6 +4,7 @@ using Journal.Api.Consumers;
 using Journal.Api.Repositories;
 using Journal.Data;
 using Journal.MessageBus;
+using Serilog;
 
 
 namespace Journal.Api
@@ -12,7 +13,16 @@ namespace Journal.Api
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
+
+            Log.Logger = new LoggerConfiguration()
+                            .WriteTo.Console()
+                            .WriteTo.Seq(builder.Configuration.GetSection("Seq").Value)
+                            .WriteTo.MySQL(builder.Configuration.GetSection("ConnectionString").Value)
+                            .CreateLogger();
+
+            builder.Services.AddSerilog();
 
             Data.AppModule.ConfigureDatabase(builder.Configuration);
 
@@ -25,8 +35,8 @@ namespace Journal.Api
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddFluentValidationAutoValidation()
                             .AddValidatorsFromAssembly(typeof(Program).Assembly);
-            
-           
+
+
 
             builder.Services.AddJournalContext(builder.Configuration);
             builder.Services.AddMessageBus();
@@ -35,6 +45,8 @@ namespace Journal.Api
 
 
             var app = builder.Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -46,7 +58,6 @@ namespace Journal.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
