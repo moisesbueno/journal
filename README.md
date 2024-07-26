@@ -34,9 +34,9 @@ heroku container:release web -a find-journal-api
 
 ## Implement on API
 
-* [ ] Entity Framework Core
+* [x] Entity Framework Core
 
-* [ ] RabbitMq
+* [x] RabbitMq
 
 * [ ] Serilog
 
@@ -54,6 +54,6 @@ heroku container:release web -a find-journal-api
 
 * [ ] JWT
 
-* [ ] IUnityOfWork
+* [x] IUnityOfWork
 
-* [ ] Dto's
+* [x] Dto's

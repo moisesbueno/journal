@@ -16,7 +16,6 @@ namespace Journal.Api
 
             Data.AppModule.ConfigureDatabase(builder.Configuration);
 
-
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -26,7 +25,8 @@ namespace Journal.Api
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddFluentValidationAutoValidation()
                             .AddValidatorsFromAssembly(typeof(Program).Assembly);
-
+            
+           
 
             builder.Services.AddJournalContext(builder.Configuration);
             builder.Services.AddMessageBus();
