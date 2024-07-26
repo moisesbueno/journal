@@ -38,7 +38,7 @@ heroku container:release web -a find-journal-api
 
 * [x] RabbitMq
 
-* [ ] Serilog
+* [x] Serilog
 
 * [ ] Redis
 
