@@ -17,9 +17,8 @@ namespace Journal.Api.Consumers
         private readonly IModel _modelChannel;
         private readonly ILogger<JournalConsumer> _logger;
         private readonly IServiceProvider _serviceProvider;
-       
 
-        public JournalConsumer(IConfiguration _configuration, IServiceProvider serviceProvider, IMapper mapper)
+        public JournalConsumer(IConfiguration _configuration, IServiceProvider serviceProvider, IMapper mapper, ILogger<JournalConsumer> logger)
         {
             var factory = new ConnectionFactory()
             {
@@ -29,6 +28,7 @@ namespace Journal.Api.Consumers
             _connection = factory.CreateConnection();
             _modelChannel = _connection.CreateModel();
             _serviceProvider = serviceProvider;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -38,7 +38,23 @@ namespace Journal.Api.Consumers
 
         private async Task Consuming(string queueName, CancellationToken stoppingToken)
         {
-            _modelChannel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _modelChannel.ExchangeDeclare(exchange: ExchangesName.DeadLetterExchange,
+                                          type: ExchangeType.Fanout,
+                                          durable: true,
+                                          autoDelete: false,
+                                          arguments: null);
+
+            _modelChannel.QueueDeclare(QueuesName.JournalDeadLetter, true, false, false, null);
+            _modelChannel.QueueBind(QueuesName.JournalDeadLetter, ExchangesName.DeadLetterExchange, "");
+
+
+            var arguments = new Dictionary<string, object>()
+            {
+                {"x-dead-letter-exchange", ExchangesName.DeadLetterExchange }
+            };
+
+            _modelChannel.QueueDeclare(QueuesName.JournalQueue, true, false, false, arguments);
+
 
             var consumer = new EventingBasicConsumer(_modelChannel);
 
@@ -47,10 +63,17 @@ namespace Journal.Api.Consumers
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                await ProcessMessageAsync(message, stoppingToken);
+                try
+                {
+                    await ProcessMessageAsync(message, stoppingToken);
 
-                _modelChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
+                    _modelChannel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                }
+                catch (Exception ex)
+                {
+                    _modelChannel.BasicNack(ea.DeliveryTag, false, false);
+                    _logger.LogError(ex, "Exception occurred while processing message from queue {queueName}", queueName);
+                }
             };
 
             _modelChannel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
@@ -68,7 +91,7 @@ namespace Journal.Api.Consumers
             var journalMessage = JsonConvert.DeserializeObject<JournalMessage>(message);
 
             var qualisId = _qualisDict.First(c => c.Value == journalMessage.Qualis2019)
-                                     .Key;
+                                      .Key;
 
             var journal = new Data.Models.Journal()
             {
@@ -85,8 +108,8 @@ namespace Journal.Api.Consumers
 
         public override void Dispose()
         {
-            _connection.Close();
-            _modelChannel.Close();
+            _connection?.Close();
+            _modelChannel?.Close();
             base.Dispose();
         }
 

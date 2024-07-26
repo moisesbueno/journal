@@ -24,7 +24,22 @@ namespace Journal.MessageBus
 
             using var channel = connection.CreateModel();
 
-            channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            channel.ExchangeDeclare(exchange: ExchangesName.DeadLetterExchange,
+                                    type: ExchangeType.Fanout,
+                                    durable: true,
+                                    autoDelete: false,
+                                    arguments: null);
+
+            channel.QueueDeclare(QueuesName.JournalQueue, true, false, false, null);
+            channel.QueueBind(QueuesName.JournalQueue, ExchangesName.DeadLetterExchange, "");
+
+
+            var arguments = new Dictionary<string, object>()
+            {
+                {"x-dead-letter-exchange", ExchangesName.DeadLetterExchange }
+            };
+
+            channel.QueueDeclare(QueuesName.JournalQueue, true, false, false, arguments);
 
             var json = JsonConvert.SerializeObject(message);
             var body = Encoding.UTF8.GetBytes(json);
