@@ -5,6 +5,8 @@ using Journal.Api.Repositories;
 using Journal.Data;
 using Journal.MessageBus;
 using Serilog;
+using Quartz;
+using Journal.Api.Jobs;
 
 
 namespace Journal.Api
@@ -42,6 +44,22 @@ namespace Journal.Api
             builder.Services.AddMessageBus();
             builder.Services.AddTransient<IJournalRepository, JournalRepository>();
             builder.Services.AddHostedService<JournalConsumer>();
+
+            builder.Services.AddQuartz(q =>
+            {
+                var jobkey = new JobKey(typeof(CleanLogJob).Name);
+
+                q.AddJob<CleanLogJob>(opts => opts.WithIdentity(jobkey));
+
+                q.AddTrigger(opts => opts
+                                   .ForJob(jobkey)
+                                   .WithIdentity($"{jobkey}-trigger")
+                                   .WithCronSchedule("0 0 */12 ? * *"));
+
+            });
+
+
+            builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 
             var app = builder.Build();
