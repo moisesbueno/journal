@@ -10,6 +10,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Journal.Api/Journal.Api.csproj", "Journal.Api/"]
+COPY ["Journal.Data/Journal.Data.csproj", "Journal.Data/"]
+COPY ["Journal.MessageBus/Journal.MessageBus.csproj", "Journal.MessageBus/"]
 RUN dotnet restore "./Journal.Api/Journal.Api.csproj"
 COPY . .
 WORKDIR "/src/Journal.Api"

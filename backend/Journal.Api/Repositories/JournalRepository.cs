@@ -39,12 +39,19 @@ namespace Journal.Api.Repositories
 
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var journal = await _journalContext.Journals.FindAsync(id);
 
-            _journalContext.Journals.Remove(journal);
+            if (journal is not null)
+            {
+                _journalContext.Journals.Remove(journal);
+                return true;
+            }
+
+            return false;
         }
+
 
         public async Task<IEnumerable<Data.Models.Journal>> GetAsync(string search, int pageNumber, int pageSize)
         {

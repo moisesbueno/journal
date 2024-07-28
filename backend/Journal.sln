@@ -4,15 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00231FD4-7E3D-405D-AD4D-52436F7414B8}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Journal.Data", "Journal.Data\Journal.Data.csproj", "{4233C88A-9D1D-4B9B-9228-773541224E50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Journal.MessageBus", "Journal.MessageBus\Journal.MessageBus.csproj", "{D92C662D-1041-4A4F-A997-8A34B7B17751}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journal.Api", "Journal.Api\Journal.Api.csproj", "{4C7E1968-2D4B-4A58-B018-1AB3C343C8C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Journal.Api", "Journal.Api\Journal.Api.csproj", "{4C7E1968-2D4B-4A58-B018-1AB3C343C8C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

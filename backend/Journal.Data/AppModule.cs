@@ -27,14 +27,17 @@ namespace Journal.Data
         {
             var connectionString = configuration.GetSection("ConnectionString").Value;
 
+            EnsureDatabase.For.MySqlDatabase(connectionString);
+
             var upgrader = DeployChanges.To
                                         .MySqlDatabase(connectionString)
                                         .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
-                                        .LogToConsole()
+                                        .LogToAutodetectedLog()
                                         .Build();
 
             var result = upgrader.PerformUpgrade();
 
         }
+
     }
 }

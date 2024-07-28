@@ -17,7 +17,8 @@ namespace Journal.Api.Jobs
         {
             using var connection = await _dataSource.OpenConnectionAsync();
 
-            var result = await connection.ExecuteAsync("DElETE FROM Logs WHERE Timestamp <= @Timestamp", new { Timestamp = DateTime.UtcNow });
+            var result = await connection.ExecuteAsync("DElETE FROM Logs WHERE Timestamp <= @Timestamp", 
+                                                       new { Timestamp = DateTime.UtcNow.AddDays(-7) });
 
             _logger.LogInformation("Clean log table with result {result}", result);
         }

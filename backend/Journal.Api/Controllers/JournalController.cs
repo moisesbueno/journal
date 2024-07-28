@@ -5,6 +5,8 @@ using Journal.Data.Interfaces;
 using Journal.MessageBus;
 using Journal.MessageBus.Messages;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 
 namespace Journal.Api.Controllers
 {
@@ -16,13 +18,19 @@ namespace Journal.Api.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJournalRepository _journalRepository;
         private readonly IPublisher<JournalMessage> _journalPublisher;
+        private readonly IConnectionMultiplexer _connectionMultiplexer;
 
-        public JournalController(IMapper mapper, IUnitOfWork unitOfWork, IJournalRepository journalRepository, IPublisher<JournalMessage> journalPublisher)
+        public JournalController(IMapper mapper,
+                                 IUnitOfWork unitOfWork,
+                                 IJournalRepository journalRepository,
+                                 IPublisher<JournalMessage> journalPublisher,
+                                 IConnectionMultiplexer connectionMultiplexer)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _journalRepository = journalRepository;
             _journalPublisher = journalPublisher;
+            _connectionMultiplexer = connectionMultiplexer;
         }
 
         [HttpPost("")]
@@ -39,11 +47,40 @@ namespace Journal.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _journalRepository.GetByIdAsync(id);
+            var redisDb = _connectionMultiplexer.GetDatabase();
 
-            var response = _mapper.Map<JournalResponse>(result);
+            string keyName = $"{typeof(JournalResponse).Name}-{id}";
+
+            string response = await redisDb.StringGetAsync(keyName);
+
+            if (string.IsNullOrEmpty(response))
+            {
+                var result = await _journalRepository.GetByIdAsync(id);
+
+                var mapperResponse = _mapper.Map<JournalResponse>(result);
+
+                response = JsonConvert.SerializeObject(mapperResponse);
+                await redisDb.StringSetAsync(keyName, response, TimeSpan.FromMinutes(1));
+            }
 
             return Ok(response);
+
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            var result = await _journalRepository.DeleteAsync(id);
+
+            if (result)
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return Ok();
+            }
+
+            return NotFound();
+
         }
     }
 }
