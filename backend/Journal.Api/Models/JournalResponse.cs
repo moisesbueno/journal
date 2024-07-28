@@ -2,13 +2,8 @@
 {
     public class JournalResponse
     {
-        public JournalResponse(string name, DateTime createdAt)
-        {
-            Name = name;
-            CreatedAt = createdAt;
-        }
+        public Guid Id { get; set; }
         public string Name { get; private set; }
-
-        public DateTime CreatedAt { get; private set; }
+        public string Issn { get; set; }
     }
 }

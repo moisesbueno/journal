@@ -7,6 +7,7 @@ using Journal.MessageBus;
 using Serilog;
 using Quartz;
 using Journal.Api.Jobs;
+using StackExchange.Redis;
 
 
 namespace Journal.Api
@@ -26,6 +27,7 @@ namespace Journal.Api
 
             builder.Services.AddSerilog();
 
+           
             Data.AppModule.ConfigureDatabase(builder.Configuration);
 
             // Add services to the container.
@@ -44,7 +46,10 @@ namespace Journal.Api
             builder.Services.AddMessageBus();
             builder.Services.AddTransient<IJournalRepository, JournalRepository>();
             builder.Services.AddHostedService<JournalConsumer>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>(
+                                        ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis").Value));
 
+           
             builder.Services.AddQuartz(q =>
             {
                 var jobkey = new JobKey(typeof(CleanLogJob).Name);
@@ -61,10 +66,7 @@ namespace Journal.Api
 
             builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
-
             var app = builder.Build();
-
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -80,6 +82,7 @@ namespace Journal.Api
             app.MapControllers();
 
             app.Run();
+
         }
     }
 }

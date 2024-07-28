@@ -9,6 +9,8 @@ namespace Journal.Api.Profiles
         {
             CreateMap<JournalRequest, JournalMessage>()
                                 .ForMember(c => c.Qualis2019, c => c.MapFrom(c => c.Qualis));
+
+            CreateMap<Data.Models.Journal, JournalResponse>();
         }
     }
 }
