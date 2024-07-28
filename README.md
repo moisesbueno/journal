@@ -40,9 +40,9 @@ heroku container:release web -a find-journal-api
 
 * [x] Serilog
 
-* [ ] Redis
+* [x] Redis
 
-* [ ] DockerFile / DockerCompose
+* [x] DockerFile / DockerCompose
 
 * [x] Migrar Projeto .NET 8 
 
