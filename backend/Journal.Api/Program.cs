@@ -45,6 +45,7 @@ namespace Journal.Api
             builder.Services.AddJournalContext(builder.Configuration);
             builder.Services.AddMessageBus();
             builder.Services.AddTransient<IJournalRepository, JournalRepository>();
+            builder.Services.AddTransient<IQualisRepository, QualisRepository>();
             builder.Services.AddHostedService<JournalConsumer>();
             builder.Services.AddSingleton<IConnectionMultiplexer>(
                                         ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis").Value));

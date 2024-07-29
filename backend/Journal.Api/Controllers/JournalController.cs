@@ -34,7 +34,7 @@ namespace Journal.Api.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Post([FromBody] JournalRequest journalRequest)
+        public async Task<IActionResult> Add([FromBody] JournalRequest journalRequest)
         {
             var journalMessage = _mapper.Map<JournalMessage>(journalRequest);
 
@@ -42,6 +42,13 @@ namespace Journal.Api.Controllers
 
             return Ok(journalMessage.Id);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromBody] JournalRequest journalRequest)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
         [HttpGet("{id}")]
@@ -56,10 +63,14 @@ namespace Journal.Api.Controllers
             if (string.IsNullOrEmpty(response))
             {
                 var result = await _journalRepository.GetByIdAsync(id);
+                
+                if(result is not null)
+                {
+                    var mapperResponse = _mapper.Map<JournalResponse>(result);
 
-                var mapperResponse = _mapper.Map<JournalResponse>(result);
-
-                response = JsonConvert.SerializeObject(mapperResponse);
+                    response = JsonConvert.SerializeObject(mapperResponse);
+                }
+                
                 await redisDb.StringSetAsync(keyName, response, TimeSpan.FromMinutes(1));
             }
 

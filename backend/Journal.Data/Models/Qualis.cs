@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Journal.Data.Models;
 
-public partial class Quali
+public partial class Qualis
 {
     public int Id { get; set; }
 

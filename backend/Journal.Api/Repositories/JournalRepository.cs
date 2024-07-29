@@ -73,7 +73,9 @@ namespace Journal.Api.Repositories
 
         public async Task<Data.Models.Journal> GetByIdAsync(Guid id)
         {
-            return await _journalContext.Journals.AsNoTracking().FirstAsync(c => c.Id == id);
+            return await _journalContext.Journals
+                                        .AsNoTracking()
+                                        .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public Task UpdateAsync(Data.Models.Journal journal)

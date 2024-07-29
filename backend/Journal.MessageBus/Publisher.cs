@@ -30,8 +30,8 @@ namespace Journal.MessageBus
                                     autoDelete: false,
                                     arguments: null);
 
-            channel.QueueDeclare(QueuesName.JournalQueue, true, false, false, null);
-            channel.QueueBind(QueuesName.JournalQueue, ExchangesName.DeadLetterExchange, "");
+            channel.QueueDeclare(QueuesName.JournalDeadLetter, true, false, false, null);
+            channel.QueueBind(QueuesName.JournalDeadLetter, ExchangesName.DeadLetterExchange, "");
 
 
             var arguments = new Dictionary<string, object>()

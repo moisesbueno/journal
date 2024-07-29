@@ -29,7 +29,7 @@ public partial class JournalContext : DbContext
 
     public virtual DbSet<Language> Languages { get; set; }
 
-    public virtual DbSet<Quali> Qualis { get; set; }
+    public virtual DbSet<Qualis> Qualis { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
