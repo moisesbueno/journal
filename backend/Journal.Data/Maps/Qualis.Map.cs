@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Journal.Data.Maps
 {
-    public class QualisMap : IEntityTypeConfiguration<Quali>
+    public class QualisMap : IEntityTypeConfiguration<Qualis>
     {
-        public void Configure(EntityTypeBuilder<Quali> builder)
+        public void Configure(EntityTypeBuilder<Qualis> builder)
         {
 
             builder.HasKey(e => e.Id).HasName("PRIMARY");

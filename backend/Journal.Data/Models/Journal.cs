@@ -28,5 +28,5 @@ public partial class Journal
 
     public virtual Format Format { get; set; }
 
-    public virtual Quali Qualis { get; set; }
+    public virtual Qualis Qualis { get; set; }
 }
