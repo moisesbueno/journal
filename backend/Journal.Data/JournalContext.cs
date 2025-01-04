@@ -31,6 +31,8 @@ public partial class JournalContext : DbContext
 
     public virtual DbSet<Qualis> Qualis { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
 
