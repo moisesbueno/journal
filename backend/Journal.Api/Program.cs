@@ -27,7 +27,7 @@ namespace Journal.Api
 
             builder.Services.AddSerilog();
 
-           
+
             Data.AppModule.ConfigureDatabase(builder.Configuration);
 
             // Add services to the container.
@@ -46,14 +46,15 @@ namespace Journal.Api
             builder.Services.AddMessageBus();
             builder.Services.AddTransient<IJournalRepository, JournalRepository>();
             builder.Services.AddTransient<IQualisRepository, QualisRepository>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddHostedService<JournalConsumer>();
             builder.Services.AddSingleton<IConnectionMultiplexer>(
                                         ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis").Value));
 
-           
+
             builder.Services.AddQuartz(q =>
             {
-                var jobkey = new JobKey(typeof(CleanLogJob).Name);
+                var jobkey = new JobKey(nameof(CleanLogJob));
 
                 q.AddJob<CleanLogJob>(opts => opts.WithIdentity(jobkey));
 

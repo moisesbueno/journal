@@ -1,17 +1,32 @@
-﻿
-namespace Journal.Data.Interfaces
+﻿namespace Journal.Data.Interfaces
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(JournalContext journalContext) : IUnitOfWork
     {
-        private readonly JournalContext _journalContext;
+        private bool _disposed;
+        private readonly JournalContext _journalContext = journalContext;
 
-        public UnitOfWork(JournalContext journalContext)
+        protected virtual void Dispose(bool disposing)
         {
-            _journalContext = journalContext;
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _journalContext?.Dispose();
+                }
+
+                _disposed = true;
+            }
         }
+
+        ~UnitOfWork()
+        {
+            Dispose(false);
+        }
+
         public void Dispose()
         {
-            _journalContext?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public async Task<int> SaveChangesAsync()

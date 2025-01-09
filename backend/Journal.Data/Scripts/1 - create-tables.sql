@@ -82,3 +82,13 @@ CREATE TABLE journal_indexation
      FOREIGN KEY(journalid) REFERENCES journal(id),
      FOREIGN KEY(journalindexationid) REFERENCES database_indexation(id)
   );
+
+CREATE TABLE user
+(
+	Id varchar(36) NOT NULL,
+    Email varchar(80) NOT NULL,
+    Password varchar(80) NOT NULL,
+    CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    primary key (Id)
+);
