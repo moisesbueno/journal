@@ -1,10 +1,7 @@
 ﻿using Journal.Api.Models;
 using Journal.Api.Repositories;
 using Journal.Api.Service;
-using Journal.Data.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Crypto.Generators;
 
 namespace Journal.Api.Controllers
 {
@@ -13,6 +10,7 @@ namespace Journal.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+
         public UserController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -46,5 +44,4 @@ namespace Journal.Api.Controllers
             }
         }
     }
-
 }

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Journal.Api.Controllers;
 using Journal.Api.Models;
 using Journal.Api.Repositories;
 

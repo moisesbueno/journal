@@ -1,8 +1,8 @@
-﻿using Journal.Data.Interfaces;
-using Journal.Data.Models;
-using Journal.Data;
+﻿using Journal.Api.Service;
+using Journal.Domain.Abstractions;
+using Journal.Domain.Entities;
+using Journal.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using Journal.Api.Service;
 
 namespace Journal.Api.Repositories
 {
@@ -16,10 +16,11 @@ namespace Journal.Api.Repositories
             _journalContext = journalContext;
             _unitOfWork = unitOfWork;
         }
+
         public async Task AddAsync(User user)
         {
             await _journalContext.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitAsync();
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -41,7 +42,7 @@ namespace Journal.Api.Repositories
 
             user.Password = PasswordHasher.HashPassword(passWord);
 
-            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitAsync();
         }
     }
 }
