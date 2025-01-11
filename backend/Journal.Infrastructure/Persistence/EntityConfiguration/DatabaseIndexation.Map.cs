@@ -13,8 +13,7 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             entity.ToTable("database_indexation");
 
             entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
+                  .HasColumnName("id");
 
             entity.Property(e => e.Description)
                 .HasMaxLength(50)

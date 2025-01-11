@@ -9,7 +9,7 @@ namespace Journal.Infrastructure.Persistence.Repositories
         private readonly JournalContext _journalContext;
         public IUserRepository UserRepository { get; }
 
-        public UnitOfWork(JournalContext journalContext, UserRepository userRepository)
+        public UnitOfWork(JournalContext journalContext, IUserRepository userRepository)
         {
             _journalContext = journalContext;
             UserRepository = userRepository;

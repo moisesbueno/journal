@@ -4,7 +4,7 @@ public partial class JournalLanguage : Entity
 {
     public Guid? Journalid { get; set; }
 
-    public int? Languageid { get; set; }
+    public Guid Languageid { get; set; }
 
     public virtual Journal Journal { get; set; }
 

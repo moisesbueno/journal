@@ -13,8 +13,9 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.ToTable("qualis");
 
             builder.Property(e => e.Id)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("char(36)")
                     .HasColumnName("id");
+
             builder.Property(e => e.Description)
                     .HasMaxLength(10)
                     .HasColumnName("description");

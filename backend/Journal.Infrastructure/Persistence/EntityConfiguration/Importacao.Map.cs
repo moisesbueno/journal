@@ -15,9 +15,11 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.Property(e => e.Issn)
                     .HasMaxLength(20)
                     .HasColumnName("issn");
+
             builder.Property(e => e.Name)
                     .HasMaxLength(255)
                     .HasColumnName("name");
+
             builder.Property(e => e.Qualis2019)
                     .HasMaxLength(10)
                     .HasColumnName("qualis_2019");

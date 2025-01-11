@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Journal.CrossCuting\Journal.CrossCuting.csproj" />
-    <ProjectReference Include="..\Journal.MessageBus\Journal.MessageBus.csproj" />
   </ItemGroup>
 
 </Project>

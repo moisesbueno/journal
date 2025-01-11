@@ -7,9 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Persistence\Scripts\4 - insert-journal.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Persistence\Scripts\1 - create-tables.sql" />
     <EmbeddedResource Include="Persistence\Scripts\2 - inserts-importacao.sql" />
-    <EmbeddedResource Include="Persistence\Scripts\3 - insert-journal.sql" />
+    <EmbeddedResource Include="Persistence\Scripts\3 - insert-qualis.sql" />
+    <EmbeddedResource Include="Persistence\Scripts\4 - insert-journal.sql" />
   </ItemGroup>
 
   <ItemGroup>

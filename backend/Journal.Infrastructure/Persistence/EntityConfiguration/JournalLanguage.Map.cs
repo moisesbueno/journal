@@ -17,9 +17,8 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.HasIndex(e => e.Languageid, "languageid");
 
             builder.Property(e => e.Journalid).HasColumnName("journalid");
-            builder.Property(e => e.Languageid)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("languageid");
+            
+            builder.Property(e => e.Languageid).HasColumnName("languageid");
 
             builder.HasOne(d => d.Journal).WithMany()
                     .HasForeignKey(d => d.Journalid)

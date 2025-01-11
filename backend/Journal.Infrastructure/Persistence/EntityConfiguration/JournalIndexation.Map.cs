@@ -17,17 +17,14 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.HasIndex(e => e.Journalindexationid, "journalindexationid");
 
             builder.Property(e => e.Journalid).HasColumnName("journalid");
-            builder.Property(e => e.Journalindexationid)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("journalindexationid");
+            
+            builder.Property(e => e.Journalindexationid).HasColumnName("journalindexationid");
 
             builder.HasOne(d => d.Journal).WithMany()
-                    .HasForeignKey(d => d.Journalid)
-                    .HasConstraintName("journal_indexation_ibfk_1");
+                    .HasForeignKey(d => d.Journalid);
 
             builder.HasOne(d => d.Journalindexation).WithMany()
-                    .HasForeignKey(d => d.Journalindexationid)
-                    .HasConstraintName("journal_indexation_ibfk_2");
+                    .HasForeignKey(d => d.Journalindexationid);
         }
     }
 }

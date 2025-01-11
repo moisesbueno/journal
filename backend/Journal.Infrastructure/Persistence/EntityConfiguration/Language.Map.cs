@@ -13,7 +13,7 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.ToTable("language");
 
             builder.Property(e => e.Id)
-                    .HasColumnType("int(11)")
+                    .HasColumnType("char(36)")
                     .HasColumnName("id");
 
             builder.Property(e => e.Description)

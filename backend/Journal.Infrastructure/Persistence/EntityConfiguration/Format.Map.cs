@@ -13,17 +13,20 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.ToTable("format");
 
             builder.Property(e => e.Id)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("id");
+                   .HasColumnName("id");
+
             builder.Property(e => e.Fontsize)
                     .HasColumnType("int(11)")
                     .HasColumnName("fontsize");
+
             builder.Property(e => e.Maxpages)
                     .HasColumnType("int(11)")
                     .HasColumnName("maxpages");
+
             builder.Property(e => e.Maxwords)
                     .HasColumnType("int(11)")
                     .HasColumnName("maxwords");
+
             builder.Property(e => e.Space)
                     .HasColumnType("int(11)")
                     .HasColumnName("space");

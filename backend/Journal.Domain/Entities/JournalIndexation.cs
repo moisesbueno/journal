@@ -4,7 +4,7 @@ public partial class JournalIndexation : Entity
 {
     public Guid? Journalid { get; set; }
 
-    public int? Journalindexationid { get; set; }
+    public Guid Journalindexationid { get; set; }
 
     public virtual Journal Journal { get; set; }
 

@@ -13,15 +13,19 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.ToTable("user");
 
             builder.Property(e => e.Id).HasMaxLength(36);
+
             builder.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("datetime");
+
             builder.Property(e => e.Email)
                 .IsRequired()
                 .HasMaxLength(80);
+
             builder.Property(e => e.Password)
                 .IsRequired()
                 .HasMaxLength(80);
+
             builder.Property(e => e.UpdatedAt)
                 .ValueGeneratedOnAddOrUpdate()
                 .HasDefaultValueSql("current_timestamp()")

@@ -9,7 +9,7 @@ CREATE TABLE importacao
 
 CREATE TABLE database_indexation
   (
-     id          INT auto_increment,
+     Id          CHAR(36),
      description VARCHAR(50),
      CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
      UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -18,7 +18,7 @@ CREATE TABLE database_indexation
 
 CREATE TABLE qualis
   (
-     id          INT auto_increment,
+     Id          CHAR(36),
      description VARCHAR(10),
      CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
      UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -27,7 +27,7 @@ CREATE TABLE qualis
 
 CREATE TABLE language
   (
-     id          INT auto_increment,
+     Id          CHAR(36),
      description VARCHAR(50),
      CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
      UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -36,7 +36,7 @@ CREATE TABLE language
 
 CREATE TABLE format
   (
-     id       INT auto_increment,
+     Id          CHAR(36),
      maxpages INT,
      maxwords INT,
      space    INT,
@@ -48,25 +48,25 @@ CREATE TABLE format
 
 CREATE TABLE journal
   (
-     id       CHAR(36),
+     Id       CHAR(36),
      issn     VARCHAR(20),
      name     VARCHAR(255),
-     qualisid INT,
+     qualisid CHAR(36),
      aimscope VARCHAR(255),
-     formatid INT,
+     formatid CHAR(36),
      apc      BOOLEAN,
      url      VARCHAR(200),
      CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
      UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     PRIMARY KEY(id),
-     FOREIGN KEY(qualisid) REFERENCES qualis(id),
-     FOREIGN KEY(formatid) REFERENCES format(id)
+     PRIMARY KEY(Id),
+     FOREIGN KEY(qualisid) REFERENCES qualis(Id),
+     FOREIGN KEY(formatid) REFERENCES format(Id)
   );
 
 CREATE TABLE journal_language
   (
-     journalid  CHAR(36),
-     languageid INT,
+     Journalid  CHAR(36),
+     Languageid CHAR(36),
      CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
      UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      FOREIGN KEY(journalid) REFERENCES journal(id),
@@ -75,8 +75,8 @@ CREATE TABLE journal_language
 
 CREATE TABLE journal_indexation
   (
-     journalid           CHAR(36),
-     journalindexationid INT,
+     Journalid           CHAR(36),
+     Journalindexationid CHAR(36),
      CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
      UpdatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      FOREIGN KEY(journalid) REFERENCES journal(id),
@@ -85,7 +85,7 @@ CREATE TABLE journal_indexation
 
 CREATE TABLE user
 (
-	Id varchar(36) NOT NULL,
+	Id CHAR(36) NOT NULL,
     Email varchar(80) NOT NULL,
     Password varchar(80) NOT NULL,
     CreatedAt DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
