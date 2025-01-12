@@ -6,11 +6,11 @@ public partial class Journal : Entity
 
     public string Name { get; set; }
 
-    public Guid Qualisid { get; set; }
+    public Guid? Qualisid { get; set; }
 
     public string Aimscope { get; set; }
 
-    public Guid Formatid { get; set; }
+    public Guid? Formatid { get; set; }
 
     public bool? Apc { get; set; }
 
@@ -19,4 +19,9 @@ public partial class Journal : Entity
     public virtual Format Format { get; set; }
 
     public virtual Qualis Qualis { get; set; }
+
+    public Journal()
+    {
+        
+    }
 }

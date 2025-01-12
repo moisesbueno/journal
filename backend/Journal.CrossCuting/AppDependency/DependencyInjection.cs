@@ -1,9 +1,11 @@
 ﻿using DbUp;
+using FluentValidation;
 using Journal.Domain.Abstractions;
 using Journal.Infrastructure.MessageBus;
 using Journal.Infrastructure.Persistence;
 using Journal.Infrastructure.Persistence.Context;
 using Journal.Infrastructure.Persistence.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +21,7 @@ namespace Journal.CrossCuting.AppDependency
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IJournalRepository,JournalRepository>();
             services.AddDbContext<JournalContext>(options =>
             {
                 var connectionString = configuration.GetSection("ConnectionString").Value;
@@ -28,6 +31,9 @@ namespace Journal.CrossCuting.AppDependency
             });
 
             services.AddSingleton(typeof(IPublisher<>), typeof(Publisher<>));
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.Load("Journal.Application")));
+            services.AddValidatorsFromAssembly(Assembly.Load("Journal.Application"));
+          
             return services;
         }
 
@@ -39,7 +45,7 @@ namespace Journal.CrossCuting.AppDependency
 
             var upgrader = DeployChanges.To
                                         .MySqlDatabase(connectionString)
-                                        .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+                                        .WithScriptsEmbeddedInAssembly(Assembly.Load("Journal.Infrastructure"))
                                         .LogToAutodetectedLog()
                                         .Build();
 

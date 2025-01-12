@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Journal.Api.Repositories;
+﻿
 using Journal.Domain.Abstractions;
 using Journal.Infrastructure.MessageBus.Queues;
-
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -17,7 +15,7 @@ namespace Journal.Api.Consumers
         private readonly ILogger<JournalConsumer> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public JournalConsumer(IConfiguration _configuration, IServiceProvider serviceProvider, IMapper mapper, ILogger<JournalConsumer> logger)
+        public JournalConsumer(IConfiguration _configuration, IServiceProvider serviceProvider, ILogger<JournalConsumer> logger)
         {
             var factory = new ConnectionFactory()
             {
@@ -94,7 +92,7 @@ namespace Journal.Api.Consumers
                 Issn = journalMessage.Issn,
                 Name = journalMessage.Name,
                // Id = journalMessage.Id,
-                Qualisid = qualisId
+                //Qualisid = qualisId
             };
 
             await journalRepository.AddAsync(journal);

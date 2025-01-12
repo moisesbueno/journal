@@ -1,6 +1,6 @@
 ﻿using Journal.Domain.Entities;
 
-namespace Journal.Api.Repositories
+namespace Journal.Domain.Abstractions
 {
     public interface IQualisRepository
     {

@@ -1,4 +1,4 @@
-﻿namespace Journal.Api.Utils
+﻿namespace Journal.Application.Utils
 {
     public class PaginatedList<T> where T : class
     {

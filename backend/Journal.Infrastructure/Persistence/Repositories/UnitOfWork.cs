@@ -8,11 +8,13 @@ namespace Journal.Infrastructure.Persistence.Repositories
         private bool _disposed;
         private readonly JournalContext _journalContext;
         public IUserRepository UserRepository { get; }
+        public IJournalRepository JournalRepository { get; }
 
-        public UnitOfWork(JournalContext journalContext, IUserRepository userRepository)
+        public UnitOfWork(JournalContext journalContext, IUserRepository userRepository, IJournalRepository journalRepository)
         {
             _journalContext = journalContext;
             UserRepository = userRepository;
+            JournalRepository = journalRepository;
         }
 
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default)

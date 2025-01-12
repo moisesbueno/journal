@@ -1,8 +1,5 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using Journal.Api.Consumers;
 using Journal.Api.Jobs;
-using Journal.Api.Repositories;
 using Journal.CrossCuting.AppDependency;
 using Quartz;
 using Serilog;
@@ -32,15 +29,10 @@ namespace Journal.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddAutoMapper(typeof(Program));
-            builder.Services.AddFluentValidationAutoValidation()
-                            .AddValidatorsFromAssembly(typeof(Program).Assembly);
-
             builder.Services.AddInfra(builder.Configuration);
             
-            builder.Services.AddTransient<IJournalRepository, JournalRepository>();
-            builder.Services.AddTransient<IQualisRepository, QualisRepository>();
-            builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+           
             builder.Services.AddHostedService<JournalConsumer>();
             builder.Services.AddSingleton<IConnectionMultiplexer>(
                                         ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis").Value));

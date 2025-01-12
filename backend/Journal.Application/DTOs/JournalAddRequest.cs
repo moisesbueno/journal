@@ -1,6 +1,6 @@
-﻿namespace Journal.Api.Models
+﻿namespace Journal.Application.DTOs
 {
-    public class JournalRequest
+    public class JournalAddRequest
     {
         public string Issn { get; set; }
         public string Name { get; set; }

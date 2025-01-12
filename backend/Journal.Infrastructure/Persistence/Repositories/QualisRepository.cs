@@ -1,8 +1,9 @@
-﻿using Journal.Domain.Entities;
+﻿using Journal.Domain.Abstractions;
+using Journal.Domain.Entities;
 using Journal.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Journal.Api.Repositories
+namespace Journal.Infrastructure.Persistence.Repositories
 {
     public class QualisRepository : IQualisRepository
     {

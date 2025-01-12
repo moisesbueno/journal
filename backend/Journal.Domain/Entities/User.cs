@@ -2,7 +2,18 @@
 
 public partial class User : Entity
 {
-    public string Email { get; set; }
+    public string Email { get; protected set; }
 
-    public string Password { get; set; }
+    public string Password { get; protected set; }
+
+    public User()
+    {
+
+    }
+
+    public User(string email, string passWord)
+    {
+        Email = email;
+        Password = passWord;
+    }
 }

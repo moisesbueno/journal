@@ -1,7 +1,9 @@
-﻿using Journal.Api.Models;
-using Journal.Api.Repositories;
-using Journal.Api.Service;
+﻿using FluentValidation;
+using Journal.Application.DTOs;
+using Journal.Application.User.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Journal.Api.Controllers
 {
@@ -9,39 +11,57 @@ namespace Journal.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IMediator _mediator;
 
-        public UserController(IUserRepository userRepository)
+
+        public UserController(IMediator mediator)
         {
-            _userRepository = userRepository;
+            _mediator = mediator;
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> AddAsync([FromBody] UserAddRequest userAddRequest)
+        public async Task<IActionResult> AddAsync([FromBody] CreateUserRequest request, CancellationToken cancellationToken)
         {
-            await _userRepository.AddAsync(userAddRequest.ToEntity());
-            return Ok();
-        }
+            var result = await _mediator.Send(request.ToCreateUserCommand(), cancellationToken);
 
-        [HttpPost("auth")]
-        public async Task<IActionResult> AuthAsync([FromBody] UserAuthRequest userAuthRequest)
-        {
-            var user = await _userRepository.GetUserByEmailAsync(userAuthRequest.Email);
-
-            if (user is null)
-                return NotFound();
-
-            var passWordIsValid = PasswordHasher.VerifyPassword(userAuthRequest.Password, user.Password);
-
-            if (passWordIsValid)
+            if (result.IsSuccess)
             {
-                await _userRepository.UpdatePassWordHashAsync(user.Email, userAuthRequest.Password);
-                return Ok(user);
+                return Ok(new { result.Data });
             }
             else
             {
-                return NotFound();
+                return BadRequest(new { errors = result.Errors });
             }
         }
+
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetUserAsync([FromBody] CreateUserCommand userCommand, CancellationToken cancellationToken)
+        //{
+        //    var createdUser = await _mediator.Send(userCommand, cancellationToken);
+        //    return Ok(createdUser);
+        //}
+
+
+
+        //[HttpPost("auth")]
+        //public async Task<IActionResult> AuthAsync([FromBody] UserAuthRequest userAuthRequest)
+        //{
+        //    var user = await _userRepository.GetUserByEmailAsync(userAuthRequest.Email);
+
+        //    if (user is null)
+        //        return NotFound();
+
+        //    var passWordIsValid = PasswordHasher.VerifyPassword(userAuthRequest.Password, user.Password);
+
+        //    if (passWordIsValid)
+        //    {
+        //        await _userRepository.UpdatePassWordHashAsync(user.Email, userAuthRequest.Password);
+        //        return Ok(user);
+        //    }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
+        //}
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Journal.Api.Service
+﻿namespace Journal.Application.Utils
 {
     public static class PasswordHasher
     {
@@ -6,7 +6,6 @@
         {
             return BCrypt.Net.BCrypt.EnhancedHashPassword(password, 12);
         }
-
         public static bool VerifyPassword(string storedHash, string enteredPassword)
         {
             return BCrypt.Net.BCrypt.EnhancedVerify(storedHash, enteredPassword);
