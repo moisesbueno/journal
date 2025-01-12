@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Journal.Api.Models
+﻿namespace Journal.Api.Models
 {
     public class JournalRequest
     {

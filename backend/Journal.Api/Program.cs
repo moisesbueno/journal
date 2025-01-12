@@ -1,14 +1,12 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Journal.Api.Consumers;
-using Journal.Api.Repositories;
-using Journal.Data;
-using Journal.MessageBus;
-using Serilog;
-using Quartz;
 using Journal.Api.Jobs;
+using Journal.Api.Repositories;
+using Journal.CrossCuting.AppDependency;
+using Quartz;
+using Serilog;
 using StackExchange.Redis;
-
 
 namespace Journal.Api
 {
@@ -16,7 +14,6 @@ namespace Journal.Api
     {
         public static void Main(string[] args)
         {
-
             var builder = WebApplication.CreateBuilder(args);
 
             Log.Logger = new LoggerConfiguration()
@@ -27,8 +24,7 @@ namespace Journal.Api
 
             builder.Services.AddSerilog();
 
-
-            Data.AppModule.ConfigureDatabase(builder.Configuration);
+            DependencyInjection.ConfigureDatabase(builder.Configuration);
 
             // Add services to the container.
 
@@ -40,17 +36,14 @@ namespace Journal.Api
             builder.Services.AddFluentValidationAutoValidation()
                             .AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-
-
-            builder.Services.AddJournalContext(builder.Configuration);
-            builder.Services.AddMessageBus();
+            builder.Services.AddInfra(builder.Configuration);
+            
             builder.Services.AddTransient<IJournalRepository, JournalRepository>();
             builder.Services.AddTransient<IQualisRepository, QualisRepository>();
             builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddHostedService<JournalConsumer>();
             builder.Services.AddSingleton<IConnectionMultiplexer>(
                                         ConnectionMultiplexer.Connect(builder.Configuration.GetSection("Redis").Value));
-
 
             builder.Services.AddQuartz(q =>
             {
@@ -62,9 +55,7 @@ namespace Journal.Api
                                    .ForJob(jobkey)
                                    .WithIdentity($"{jobkey}-trigger")
                                    .WithCronSchedule("0 0 */12 ? * *"));
-
             });
-
 
             builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
@@ -84,7 +75,6 @@ namespace Journal.Api
             app.MapControllers();
 
             app.Run();
-
         }
     }
 }

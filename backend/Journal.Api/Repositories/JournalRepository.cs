@@ -1,7 +1,5 @@
-﻿using Journal.Api.Models;
-using Journal.Data;
+﻿using Journal.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System.Net.NetworkInformation;
 
 namespace Journal.Api.Repositories
 {
@@ -17,7 +15,7 @@ namespace Journal.Api.Repositories
 
         public string Search { get; }
 
-        public async Task AddAsync(Data.Models.Journal model)
+        public async Task AddAsync(Domain.Entities.Journal model)
         {
             await _journalContext.Journals.AddAsync(model);
         }
@@ -36,7 +34,6 @@ namespace Journal.Api.Repositories
             var total = await query.CountAsync();
 
             return total;
-
         }
 
         public async Task<bool> DeleteAsync(Guid id)
@@ -52,8 +49,7 @@ namespace Journal.Api.Repositories
             return false;
         }
 
-
-        public async Task<IEnumerable<Data.Models.Journal>> GetAsync(string search, int pageNumber, int pageSize)
+        public async Task<IEnumerable<Domain.Entities.Journal>> GetAsync(string search, int pageNumber, int pageSize)
         {
             var query = _journalContext.Journals
                                        .AsNoTracking()
@@ -71,14 +67,14 @@ namespace Journal.Api.Repositories
             return result;
         }
 
-        public async Task<Data.Models.Journal> GetByIdAsync(Guid id)
+        public async Task<Domain.Entities.Journal> GetByIdAsync(Guid id)
         {
             return await _journalContext.Journals
                                         .AsNoTracking()
                                         .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public Task UpdateAsync(Data.Models.Journal journal)
+        public Task UpdateAsync(Domain.Entities.Journal journal)
         {
             throw new NotImplementedException();
         }

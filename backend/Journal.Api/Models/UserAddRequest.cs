@@ -1,5 +1,5 @@
 ﻿using Journal.Api.Service;
-using Journal.Data.Models;
+using Journal.Domain.Entities;
 
 namespace Journal.Api.Models
 {
@@ -13,7 +13,6 @@ namespace Journal.Api.Models
         {
             return new User
             {
-                Id = Guid.NewGuid(),
                 Email = Email,
                 Password = PasswordHasher.HashPassword(Password)
             };

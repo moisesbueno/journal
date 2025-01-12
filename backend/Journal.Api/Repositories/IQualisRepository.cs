@@ -1,4 +1,4 @@
-﻿using Journal.Data.Models;
+﻿using Journal.Domain.Entities;
 
 namespace Journal.Api.Repositories
 {

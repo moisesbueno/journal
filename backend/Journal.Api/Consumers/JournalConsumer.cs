@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Journal.Api.Repositories;
-using Journal.Data.Interfaces;
-using Journal.MessageBus;
-using Journal.MessageBus.Messages;
+using Journal.Domain.Abstractions;
+using Journal.Infrastructure.MessageBus.Queues;
+
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using System.Threading.Channels;
 
 namespace Journal.Api.Consumers
 {
@@ -47,14 +46,12 @@ namespace Journal.Api.Consumers
             _modelChannel.QueueDeclare(QueuesName.JournalDeadLetter, true, false, false, null);
             _modelChannel.QueueBind(QueuesName.JournalDeadLetter, ExchangesName.DeadLetterExchange, "");
 
-
             var arguments = new Dictionary<string, object>()
             {
                 {"x-dead-letter-exchange", ExchangesName.DeadLetterExchange }
             };
 
             _modelChannel.QueueDeclare(QueuesName.JournalQueue, true, false, false, arguments);
-
 
             var consumer = new EventingBasicConsumer(_modelChannel);
 
@@ -83,7 +80,6 @@ namespace Journal.Api.Consumers
 
         private async Task ProcessMessageAsync(string message, CancellationToken stoppingToken)
         {
-
             using var scope = _serviceProvider.CreateScope();
             var journalRepository = scope.ServiceProvider.GetRequiredService<IJournalRepository>();
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
@@ -93,17 +89,17 @@ namespace Journal.Api.Consumers
             var qualisId = _qualisDict.First(c => c.Value == journalMessage.Qualis2019)
                                       .Key;
 
-            var journal = new Data.Models.Journal()
+            var journal = new Domain.Entities.Journal()
             {
                 Issn = journalMessage.Issn,
                 Name = journalMessage.Name,
-                Id = journalMessage.Id,
+               // Id = journalMessage.Id,
                 Qualisid = qualisId
             };
 
             await journalRepository.AddAsync(journal);
 
-            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.CommitAsync();
         }
 
         public override void Dispose()
@@ -113,7 +109,7 @@ namespace Journal.Api.Consumers
             base.Dispose();
         }
 
-        readonly Dictionary<int, string> _qualisDict = new()
+        private readonly Dictionary<int, string> _qualisDict = new()
         {
             { 1, "A1" },
             { 2, "A2" },

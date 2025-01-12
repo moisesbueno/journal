@@ -18,5 +18,4 @@
         public long TotalPages =>
             Convert.ToInt64(Math.Round((double)Total / PageSize, 0, MidpointRounding.ToPositiveInfinity));
     }
-
 }
