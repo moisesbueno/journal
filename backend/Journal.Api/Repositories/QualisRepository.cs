@@ -1,5 +1,5 @@
-﻿using Journal.Data;
-using Journal.Data.Models;
+﻿using Journal.Domain.Entities;
+using Journal.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Journal.Api.Repositories

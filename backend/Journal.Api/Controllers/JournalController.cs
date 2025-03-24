@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Journal.Api.Models;
 using Journal.Api.Repositories;
-using Journal.Data.Interfaces;
-using Journal.MessageBus;
-using Journal.MessageBus.Messages;
+using Journal.Domain.Abstractions;
+using Journal.Infrastructure.MessageBus;
+using Journal.Infrastructure.MessageBus.Queues;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -49,8 +49,6 @@ namespace Journal.Api.Controllers
             throw new NotImplementedException();
         }
 
-
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -63,21 +61,19 @@ namespace Journal.Api.Controllers
             if (string.IsNullOrEmpty(response))
             {
                 var result = await _journalRepository.GetByIdAsync(id);
-                
-                if(result is not null)
+
+                if (result is not null)
                 {
                     var mapperResponse = _mapper.Map<JournalResponse>(result);
 
                     response = JsonConvert.SerializeObject(mapperResponse);
                 }
-                
+
                 await redisDb.StringSetAsync(keyName, response, TimeSpan.FromMinutes(1));
             }
 
             return Ok(response);
-
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(Guid id)
@@ -86,12 +82,11 @@ namespace Journal.Api.Controllers
 
             if (result)
             {
-                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
                 return Ok();
             }
 
             return NotFound();
-
         }
     }
 }
