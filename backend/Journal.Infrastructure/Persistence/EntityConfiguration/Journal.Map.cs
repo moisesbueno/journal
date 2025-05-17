@@ -50,7 +50,6 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
                 .HasMaxLength(200)
                 .HasColumnName("url");
 
-<<<<<<< HEAD
             builder.HasOne(d => d.Format)
                 .WithMany(p => p.Journals)
                 .HasForeignKey(d => d.Formatid);
@@ -58,15 +57,6 @@ namespace Journal.Infrastructure.Persistence.EntityConfiguration
             builder.HasOne(d => d.Qualis)
                 .WithMany(p => p.Journals)
                 .HasForeignKey(d => d.Qualisid);
-=======
-            builder.HasOne(d => d.Format).WithMany(p => p.Journals)
-                    .HasForeignKey(d => d.Formatid)
-                    .HasConstraintName("journal_ibfk_2");
-
-            builder.HasOne(d => d.Qualis).WithMany(p => p.Journals)
-                    .HasForeignKey(d => d.Qualisid)
-                    .HasConstraintName("journal_ibfk_1");
->>>>>>> c63afb58e6d06c77e8f9a02d593152036bd6f245
         }
     }
 }

@@ -94,7 +94,7 @@ namespace Journal.Api.Consumers
                 Issn = journalMessage.Issn,
                 Name = journalMessage.Name,
                // Id = journalMessage.Id,
-                Qualisid = qualisId
+                //Qualisid = qualisId
             };
 
             await journalRepository.AddAsync(journal);
