@@ -1,16 +1,18 @@
 ﻿using FluentValidation;
 using Journal.Api.Models;
-using Journal.Api.Repositories;
+using Journal.Application.DTOs;
+using Journal.Domain.Abstractions;
 
 namespace Journal.Api.Validators;
 
-public class JournalRequestValidator : AbstractValidator<JournalRequest>
+public class JournalRequestValidator : AbstractValidator<JournalAddRequest>
 {
     public JournalRequestValidator(IQualisRepository qualisRepository)
     {
         var qualis = qualisRepository.ListAll().Result
             .Select(c => c.Description)
             .ToList();
+        
         RuleFor(r => r.Issn)
             .NotEmpty()
             .NotNull();
