@@ -33,7 +33,7 @@ namespace Journal.Infrastructure.Persistence.Repositories
 
             return total;
         }
-
+        
         public async Task<IEnumerable<Domain.Entities.Journal>> GetAsync(string search, int pageNumber, int pageSize)
         {
             var query = _journalContext.Journals
@@ -63,13 +63,10 @@ namespace Journal.Infrastructure.Persistence.Repositories
         {
             var journal = await _journalContext.Journals.FindAsync(id);
 
-            if (journal is not null)
-            {
-                _journalContext.Journals.Remove(journal);
-                return true;
-            }
+            if (journal is null) return false;
+            _journalContext.Journals.Remove(journal);
+            return true;
 
-            return false;
         }
 
         public Task UpdateAsync(Domain.Entities.Journal journal)

@@ -4,7 +4,7 @@ public partial class User : Entity
 {
     public string Email { get; protected set; }
 
-    public string Password { get; protected set; }
+    public string Password { get; set; }
 
     public User()
     {
