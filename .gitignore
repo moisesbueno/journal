@@ -96,10 +96,7 @@ StyleCopReport.xml
 *.tmp_proj
 *_wpftmp.csproj
 *.log
-<<<<<<< HEAD
 *.tlog
-=======
->>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
 *.vspscc
 *.vssscc
 .builds
@@ -210,12 +207,9 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
-<<<<<<< HEAD
 # Nuget personal access tokens and Credentials
 nuget.config
 
-=======
->>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
@@ -368,7 +362,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-<<<<<<< HEAD
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
@@ -394,5 +387,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-=======
->>>>>>> 6ae5fc30da2c56f5fbfcd764a20284e24a57bc76
