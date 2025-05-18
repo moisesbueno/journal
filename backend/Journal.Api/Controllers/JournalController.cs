@@ -4,8 +4,6 @@ using Journal.Domain.Abstractions;
 using Journal.Infrastructure.MessageBus;
 using Journal.Infrastructure.MessageBus.Queues;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using StackExchange.Redis;
 
 namespace Journal.Api.Controllers;
 
