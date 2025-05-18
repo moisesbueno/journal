@@ -1,9 +1,11 @@
-﻿using AutoMapper;
-using Journal.Api.Models;
+﻿using Journal.Api.Models;
+using Journal.Application.DTOs;
 using Journal.Domain.Abstractions;
 using Journal.Infrastructure.MessageBus;
 using Journal.Infrastructure.MessageBus.Queues;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 
 namespace Journal.Api.Controllers;
 
@@ -14,16 +16,14 @@ public class JournalController : Controller
     private readonly IConnectionMultiplexer _connectionMultiplexer;
     private readonly IPublisher<JournalMessage> _journalPublisher;
     private readonly IJournalRepository _journalRepository;
-    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public JournalController(IMapper mapper,
+    public JournalController(
         IUnitOfWork unitOfWork,
         IJournalRepository journalRepository,
         IPublisher<JournalMessage> journalPublisher,
         IConnectionMultiplexer connectionMultiplexer)
     {
-        _mapper = mapper;
         _unitOfWork = unitOfWork;
         _journalRepository = journalRepository;
         _journalPublisher = journalPublisher;
@@ -31,9 +31,9 @@ public class JournalController : Controller
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> Add([FromBody] JournalRequest journalRequest)
+    public async Task<IActionResult> Add([FromBody] JournalAddRequest journalRequest)
     {
-        var journalMessage = _mapper.Map<JournalMessage>(journalRequest);
+        var journalMessage = journalRequest.ToModel();
 
         await _journalPublisher.SendMessageAsync(journalMessage, QueuesName.JournalQueue);
 
@@ -41,7 +41,7 @@ public class JournalController : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromBody] JournalRequest journalRequest)
+    public async Task<IActionResult> Update([FromBody] JournalAddRequest journalRequest)
     {
         throw new NotImplementedException();
     }
@@ -61,9 +61,7 @@ public class JournalController : Controller
 
             if (result is not null)
             {
-                var mapperResponse = _mapper.Map<JournalResponse>(result);
-
-                response = JsonConvert.SerializeObject(mapperResponse);
+                response = JsonConvert.SerializeObject(result);
             }
 
             await redisDb.StringSetAsync(keyName, response, TimeSpan.FromMinutes(1));
